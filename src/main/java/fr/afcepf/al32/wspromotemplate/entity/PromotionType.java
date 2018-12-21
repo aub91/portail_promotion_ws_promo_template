@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class PromotionType {
+public abstract class PromotionType {
 
     @Column(name = "promotion_type_id")
     private Long promotionTypeId;
