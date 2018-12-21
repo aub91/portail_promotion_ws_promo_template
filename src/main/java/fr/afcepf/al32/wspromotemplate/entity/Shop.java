@@ -16,15 +16,10 @@ public class Shop {
     @Column(name = "shopkeeper_id")
     private Long shopkeeperId;
 
-    @ManyToOne
-    @JoinColumn(name = "promotion_id")
-    private Promotion promotionFK;
-
-    public Shop(Long shopId, Point location, Long shopkeeperId, Promotion promotionFK) {
+    public Shop(Long shopId, Point location, Long shopkeeperId) {
         this.shopId = shopId;
         this.location = location;
         this.shopkeeperId = shopkeeperId;
-        this.promotionFK = promotionFK;
     }
 
     public Long getShopId() {
@@ -49,13 +44,5 @@ public class Shop {
 
     public void setShopkeeperId(Long shopkeeperId) {
         this.shopkeeperId = shopkeeperId;
-    }
-
-    public Promotion getPromotionFK() {
-        return promotionFK;
-    }
-
-    public void setPromotionFK(Promotion promotionFK) {
-        this.promotionFK = promotionFK;
     }
 }

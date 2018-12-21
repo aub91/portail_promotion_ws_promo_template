@@ -1,21 +1,26 @@
 package fr.afcepf.al32.wspromotemplate.entity;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.time.Duration;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Document(collection = "promotions")
 public class Promotion {
 
     @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     @Column(name = "promotion_id")
     private Long promotionId;
+
+    @Column(name="timestamp")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;
 
     private String name;
 
@@ -42,8 +47,7 @@ public class Promotion {
     private Boolean isCumulative;
 
     @OneToMany(mappedBy = "promotionFK", fetch=FetchType.EAGER)
-    @MapKey(name="id")
-    private Map<Long, Shop> shops = new HashMap<>();
+    private List<Shop> shops = new ArrayList<>();
 
     @Embedded
     @Column(name="promotion_type")
@@ -53,12 +57,12 @@ public class Promotion {
     private Product product;
 
     @OneToMany(mappedBy = "promotionFK", fetch=FetchType.EAGER)
-    @MapKey(name="id")
-    private Map<Long, Reservation> reservations = new HashMap<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Promotion(Long promotionId, String name, String description, Date dateCreation, Duration limitTimePromotion, Duration limitTimeTakePromotion, Double reservedProductPercentage, Boolean isCumulative, PromotionType promotionType, Product product) {
         this.promotionId = promotionId;
         this.name = name;
+        this.timestamp = new Date();
         this.description = description;
         this.dateCreation = dateCreation;
         this.limitTimePromotion = limitTimePromotion;
@@ -149,14 +153,6 @@ public class Promotion {
         isCumulative = cumulative;
     }
 
-    public Map<Long, Shop> getShops() {
-        return shops;
-    }
-
-    public void setShops(Map<Long, Shop> shops) {
-        this.shops = shops;
-    }
-
     public PromotionType getPromotionType() {
         return promotionType;
     }
@@ -173,11 +169,27 @@ public class Promotion {
         this.product = product;
     }
 
-    public Map<Long, Reservation> getReservations() {
+    public List<Shop> getShops() {
+        return shops;
+    }
+
+    public void setShops(List<Shop> shops) {
+        this.shops = shops;
+    }
+
+    public List<Reservation> getReservations() {
         return reservations;
     }
 
-    public void setReservations(Map<Long, Reservation> reservations) {
+    public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

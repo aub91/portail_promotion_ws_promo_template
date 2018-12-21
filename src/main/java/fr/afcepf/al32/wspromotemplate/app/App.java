@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 
 
-@SpringBootApplication(scanBasePackages= {"fr.afcepf.al32.groupe2"})
+@SpringBootApplication(scanBasePackages= {"fr.afcepf.al32.wspromotemplate"})
 public class App extends SpringBootServletInitializer{
 
 	public static void main(String[] args) {

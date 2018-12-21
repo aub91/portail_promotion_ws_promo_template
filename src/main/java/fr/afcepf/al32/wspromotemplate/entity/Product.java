@@ -5,9 +5,6 @@ import java.util.Date;
 
 public class Product {
 
-    @Id
-    private String id;
-
     @Column(name = "base_product_id")
     private Long baseProductId;
 
@@ -42,14 +39,6 @@ public class Product {
         this.addDate = addDate;
         this.libelle = libelle;
         this.category = category;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Long getBaseProductId() {
