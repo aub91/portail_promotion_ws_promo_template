@@ -15,6 +15,12 @@ public class Discount extends PromotionType {
 	@Column(name = "min_purchase_amount")
 	private Double minPurchaseAmount;
 
+	public Discount(Long promotionTypeId, @NotNull @Min(0) Double discountValue, Double minPurchaseAmount) {
+		super(promotionTypeId);
+		this.discountValue = discountValue;
+		this.minPurchaseAmount = minPurchaseAmount;
+	}
+
 	public Double getDiscountValue() {
 		return discountValue;
 	}

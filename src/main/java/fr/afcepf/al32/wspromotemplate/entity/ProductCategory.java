@@ -10,6 +10,12 @@ public class ProductCategory {
 
     private String parent;
 
+    public ProductCategory(String libelle, List<String> ancestors, String parent) {
+        this.libelle = libelle;
+        this.ancestors = ancestors;
+        this.parent = parent;
+    }
+
     public String getLibelle() {
         return libelle;
     }

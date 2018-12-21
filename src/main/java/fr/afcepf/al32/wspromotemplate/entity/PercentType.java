@@ -13,6 +13,12 @@ public class PercentType extends PromotionType {
 	@Column(name = "min_purchase_amount")
 	private Double minPurchaseAmount;
 
+	public PercentType(Long promotionTypeId, @NotNull Double percentValue, Double minPurchaseAmount) {
+		super(promotionTypeId);
+		this.percentValue = percentValue;
+		this.minPurchaseAmount = minPurchaseAmount;
+	}
+
 	public Double getPercentValue() {
 		return percentValue;
 	}

@@ -11,6 +11,11 @@ public class Client {
 
     private Point location;
 
+    public Client(Long client_id, Point location) {
+        this.client_id = client_id;
+        this.location = location;
+    }
+
     public Long getClient_id() {
         return client_id;
     }

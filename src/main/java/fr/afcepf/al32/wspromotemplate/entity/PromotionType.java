@@ -9,6 +9,10 @@ public class PromotionType {
     @Column(name = "promotion_type_id")
     private Long promotionTypeId;
 
+    public PromotionType(Long promotionTypeId) {
+        this.promotionTypeId = promotionTypeId;
+    }
+
     public Long getPromotionTypeId() {
         return promotionTypeId;
     }

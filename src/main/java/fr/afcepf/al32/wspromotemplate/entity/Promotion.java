@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.*;
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Document(collection = "promotions")
@@ -13,6 +14,7 @@ public class Promotion {
     @Id
     private String id;
 
+    @Column(name = "promotion_id")
     private Long promotionId;
 
     private String name;
@@ -41,8 +43,8 @@ public class Promotion {
 
     @OneToMany(mappedBy = "promotionFK", fetch=FetchType.EAGER)
     @MapKey(name="id")
-    private Map<Long, Shop> shops;
-    
+    private Map<Long, Shop> shops = new HashMap<>();
+
     @Embedded
     @Column(name="promotion_type")
     private PromotionType promotionType;
@@ -52,7 +54,20 @@ public class Promotion {
 
     @OneToMany(mappedBy = "promotionFK", fetch=FetchType.EAGER)
     @MapKey(name="id")
-    private Map<Long, Reservation> reservations;
+    private Map<Long, Reservation> reservations = new HashMap<>();
+
+    public Promotion(Long promotionId, String name, String description, Date dateCreation, Duration limitTimePromotion, Duration limitTimeTakePromotion, Double reservedProductPercentage, Boolean isCumulative, PromotionType promotionType, Product product) {
+        this.promotionId = promotionId;
+        this.name = name;
+        this.description = description;
+        this.dateCreation = dateCreation;
+        this.limitTimePromotion = limitTimePromotion;
+        this.limitTimeTakePromotion = limitTimeTakePromotion;
+        this.reservedProductPercentage = reservedProductPercentage;
+        this.isCumulative = isCumulative;
+        this.promotionType = promotionType;
+        this.product = product;
+    }
 
     public String getId() {
         return id;

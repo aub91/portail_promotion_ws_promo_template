@@ -25,6 +25,13 @@ public class Reservation {
     @Embedded
     private Client client;
 
+    public Reservation(Long reservationId, Date dateCreation, Double quantityRequested, Client client) {
+        this.reservationId = reservationId;
+        this.dateCreation = dateCreation;
+        this.quantityRequested = quantityRequested;
+        this.client = client;
+    }
+
     public Long getReservationId() {
         return reservationId;
     }

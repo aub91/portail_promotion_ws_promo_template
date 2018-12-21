@@ -13,8 +13,13 @@ public class Pack extends PromotionType {
 	@Column(name="number_offered")
 	@NotNull
 	private Integer numberOffered;
-	
-	
+
+	public Pack(Long promotionTypeId, @NotNull Integer numberPurchased, @NotNull Integer numberOffered) {
+		super(promotionTypeId);
+		this.numberPurchased = numberPurchased;
+		this.numberOffered = numberOffered;
+	}
+
 	public Integer getNumberPurchased() {
 		return numberPurchased;
 	}

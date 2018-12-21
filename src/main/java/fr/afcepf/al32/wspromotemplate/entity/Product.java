@@ -34,6 +34,16 @@ public class Product {
     @JoinColumn(name = "product_category_id")
     private ProductCategory category;
 
+    public Product(Long baseProductId, Long referenceProductId, Double initPrice, String description, Date addDate, String libelle, ProductCategory category) {
+        this.baseProductId = baseProductId;
+        this.referenceProductId = referenceProductId;
+        this.initPrice = initPrice;
+        this.description = description;
+        this.addDate = addDate;
+        this.libelle = libelle;
+        this.category = category;
+    }
+
     public String getId() {
         return id;
     }

@@ -20,6 +20,13 @@ public class Shop {
     @JoinColumn(name = "promotion_id")
     private Promotion promotionFK;
 
+    public Shop(Long shopId, Point location, Long shopkeeperId, Promotion promotionFK) {
+        this.shopId = shopId;
+        this.location = location;
+        this.shopkeeperId = shopkeeperId;
+        this.promotionFK = promotionFK;
+    }
+
     public Long getShopId() {
         return shopId;
     }
