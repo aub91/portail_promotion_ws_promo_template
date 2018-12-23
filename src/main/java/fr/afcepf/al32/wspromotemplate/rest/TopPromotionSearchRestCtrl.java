@@ -31,4 +31,20 @@ public class TopPromotionSearchRestCtrl {
 	public void getSearchByShopper() {
 		promotionSearchService.searchTopPromotionByShopKeeper(null);
 	}
+
+	@PostMapping("/create")
+	public void createData() {
+		Promotion promo = new Promotion(1L, "promo1", "promo1 desc", new Date(), Duration.ofDays(2L), Duration.ofHours(2), 50.0, false,
+				new PercentType(1L, 20.0, 1.0), new Product(1L, 1L, 20.0, "produit1 desc", new Date(), "produit1", new ProductCategory("Prêt à porter", Arrays.asList("Homme", "Femme"), null)));
+
+		promo.getShops().add(new Shop(1L, new Point(20.0, 19.0), 1L));
+		promo.getReservations().add(new Reservation(1L, new Date(), 2.0, new Client(1L, new Point(-20.0, 125.0))));
+
+		mongoOps.insert(promo, "promotions");
+
+		Query query = new Query(Criteria.where("product.category.libelle").is("Prêt à porter").andOperator(Criteria.where("product.category.ancestors").is("Homme")));
+		List<Promotion> promotions = mongoOps.find(query, Promotion.class, "promotions");
+		promotions.forEach(x -> System.out.println(x.getId()));
+
+	}
 }

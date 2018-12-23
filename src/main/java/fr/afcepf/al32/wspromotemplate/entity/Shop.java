@@ -1,6 +1,7 @@
 package fr.afcepf.al32.wspromotemplate.entity;
 
 import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -11,6 +12,7 @@ public class Shop {
     @Column(name = "shop_id")
     private Long shopId;
 
+    @Indexed
     private Point location;
 
     @Column(name = "shopkeeper_id")

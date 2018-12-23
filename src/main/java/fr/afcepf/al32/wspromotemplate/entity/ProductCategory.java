@@ -16,6 +16,10 @@ public class ProductCategory {
         this.parent = parent;
     }
 
+    public ProductCategory(){
+
+    }
+
     public String getLibelle() {
         return libelle;
     }
