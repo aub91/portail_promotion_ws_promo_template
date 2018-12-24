@@ -1,6 +1,6 @@
 package fr.afcepf.al32.wspromotemplate.rest;
 
-import fr.afcepf.al32.wspromotemplate.entity.*;
+import fr.afcepf.al32.groupe2.ws.wsPromoTemplate.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoOperations;

@@ -1,11 +1,10 @@
 package fr.afcepf.al32.wspromotemplate.dao;
 
-import fr.afcepf.al32.wspromotemplate.entity.Promotion;
-import fr.afcepf.al32.wspromotemplate.entity.PromotionResultDto;
+import fr.afcepf.al32.groupe2.ws.wsPromoTemplate.dto.PromotionTemplateResultDto;
 import org.springframework.data.geo.Point;
 
 import java.util.List;
 
 public interface IPromotionDao {
-    List<PromotionResultDto> getTopFivePromotionByShopKeeper(Point sourcePoint, String[] categories);
+    List<PromotionTemplateResultDto> getTopFivePromotionByShopKeeper(Point sourcePoint, String[] categories);
 }

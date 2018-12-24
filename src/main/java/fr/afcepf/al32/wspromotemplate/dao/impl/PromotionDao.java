@@ -5,29 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.Block;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
+import fr.afcepf.al32.groupe2.ws.wsPromoTemplate.dto.PromotionTemplateResultDto;
 import fr.afcepf.al32.wspromotemplate.dao.IPromotionDao;
-import fr.afcepf.al32.wspromotemplate.entity.*;
 import org.bson.Document;
 import org.bson.json.JsonWriterSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.NearQuery;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -36,7 +26,7 @@ public class PromotionDao implements IPromotionDao {
     @Autowired
     private MongoOperations mongoOps;
 
-    public List<PromotionResultDto> getTopFivePromotionByShopKeeper(Point sourcePoint, String[] categories){
+    public List<PromotionTemplateResultDto> getTopFivePromotionByShopKeeper(Point sourcePoint, String[] categories){
 
         MongoCollection<Document> promotionCollection = mongoOps.getCollection("promotions");
 
@@ -77,7 +67,7 @@ public class PromotionDao implements IPromotionDao {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        List<PromotionResultDto> result = new ArrayList<>();
+        List<PromotionTemplateResultDto> result = new ArrayList<>();
 
         JsonWriterSettings settings = JsonWriterSettings.builder()
                 .int64Converter((value, writer) -> writer.writeNumber(value.toString()))
@@ -86,7 +76,7 @@ public class PromotionDao implements IPromotionDao {
 
         iterable.forEach((Block<Document>) document -> {
             try {
-                result.add(mapper.readValue(document.toJson(settings), PromotionResultDto.class));
+                result.add(mapper.readValue(document.toJson(settings), PromotionTemplateResultDto.class));
 
             } catch (IOException e) {
                 e.printStackTrace();
