@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,25 +31,51 @@ public class PromotionDao implements IPromotionDao {
 
         MongoCollection<Document> promotionCollection = mongoOps.getCollection("promotions");
 
-        String geoNearStep = String.format("{$geoNear: {near: { type: 'Point', coordinates: [ %f , %f ] }, distanceField: 'dist', key: 'shops.location', maxDistance: 2, num: 5 }}", sourcePoint.getX(), sourcePoint.getY());
+        /*
+            Etape d'aggrégation pour la recherche géographique
+         */
+        String geoNearStep = String.format("{$geoNear: {near: { type: 'Point', coordinates: [ %s , %s ] }, distanceField: 'dist', key: 'shops.location', maxDistance: 2, num: 5 }}", sourcePoint.getX(), sourcePoint.getY());
         Document geoNear = Document.parse(geoNearStep);
 
         LocalDateTime dateTime = LocalDateTime.now().minusMonths(3L);
+        String date = dateTime.format(DateTimeFormatter.ISO_DATE);
 
-        String matchStep = String.format("{$match: {$and: [{dateCreation: {$gte: '%s'}}, {$or: [{'product.category.libelle': {$in: %s}}, {'product.category.ancestors': {$in: %s}}]}]}}", dateTime.toString(), Arrays.toString(categories), Arrays.toString(categories));
+        /*
+            Etape d'aggrégation pour une sélection des promotions sur la date de création
+            et les catégories des produits des magasins.
+         */
+        String matchStep = String.format("{$match: {$and: [{dateCreation: {$gte: ISODate('%s')}}, {$or: [{'product.category.libelle': {$in: %s}}, {'product.category.ancestors': {$in: %s}}]}]}}", date, Arrays.toString(categories), Arrays.toString(categories));
 
         Document match = Document.parse(matchStep);
 
+        /*
+            Etape d'aggrégation pour exclure certains champs du retour.
+         */
         Document exclusionProjection = Document.parse("{$project: { dateCreation: 0, isCumulative: 0, shops: 0, 'product.addDate': 0 }}");
 
+        /*
+            Etape d'aggrégation pour indiquer les champs du retour et en créer un nouveau, reservationNumber.
+         */
         Document inclusionProjection = Document.parse("{$project: { promotionId: 1, name : 1, description : 1, limitTimePromotion : 1, limitTimeTakePromotion : 1, reservedProductPercentage : 1, dist: 1, promotionType : 1, product : 1, _class : 1, timestamp: 1, reservationsNumber: {$size: '$reservations'} }}");
 
+        /*
+            Etape d'aggrégation pour grouper les résultats, permettant de garder pour une même promotion, au sens BDD relationnel, celui avec le timestamp le plus récent.
+         */
         Document group = Document.parse("{$group: { _id : {promotionId: '$promotionId', name : '$name', description : '$description', limitTimePromotion : '$limitTimePromotion', limitTimeTakePromotion : '$limitTimeTakePromotion', reservedProductPercentage : '$reservedProductPercentage', dist: '$dist', promotionType : '$promotionType', product : '$product', _class : '$_class', reservationsNumber: '$reservationsNumber'}, timestamp : {$max: '$timestamp'}} }");
 
+        /*
+            Etape replaçant la racine de l'objet en retour ce qui était au préalable dans le champ _id (c'est ce qui nous intéresse)
+         */
         Document replaceRoot = Document.parse("{$replaceRoot: {newRoot: '$_id'}}");
 
+        /*
+            Etape d'aggrégation de tri
+         */
         Document sort = Document.parse("{$sort: {reservedProductPercentage: -1, reservationsNumber: -1, dist: 1}}");
 
+        /*
+            Etape limitant le nombre de résultat retourné aux cinq premiers.
+         */
         Document limit = Document.parse("{$limit: 5}");
 
         List<Document> aggregationList = new ArrayList<>();

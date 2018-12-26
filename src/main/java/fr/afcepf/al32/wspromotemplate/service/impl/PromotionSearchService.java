@@ -1,5 +1,6 @@
 package fr.afcepf.al32.wspromotemplate.service.impl;
 
+import fr.afcepf.al32.groupe2.ws.wsPromoTemplate.dto.PromotionTemplateResultDto;
 import fr.afcepf.al32.wspromotemplate.dao.IPromotionDao;
 import fr.afcepf.al32.wspromotemplate.service.itf.IPromotionSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,9 @@ public class PromotionSearchService implements IPromotionSearchService {
     private IPromotionDao promotionDao;
 
     @Override
-    public void searchTopPromotionByShopKeeper(String shopperDto) {
-        String[] array = {"\"Prêt à porter\""};
-        promotionDao.getTopFivePromotionByShopKeeper(new Point(19.0, 20.0), array);
+    public List<PromotionTemplateResultDto> searchTopPromotionByShopKeeper(Double sourceLong, Double sourceLat, List<String> categories) {
+        String[] categoryArray = new String[categories.size()];
+        categories.toArray(categoryArray);
+        return promotionDao.getTopFivePromotionByShopKeeper(new Point(sourceLong, sourceLat), categoryArray);
     }
 }
