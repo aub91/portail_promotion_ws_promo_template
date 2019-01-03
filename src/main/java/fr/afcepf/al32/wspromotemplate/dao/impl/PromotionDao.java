@@ -34,7 +34,7 @@ public class PromotionDao implements IPromotionDao {
         /*
             Etape d'aggrégation pour la recherche géographique
          */
-        String geoNearStep = String.format("{$geoNear: {near: { type: 'Point', coordinates: [ %s , %s ] }, distanceField: 'dist', key: 'shops.location', maxDistance: 2, num: 5 }}", sourcePoint.getX(), sourcePoint.getY());
+        String geoNearStep = String.format("{$geoNear: {near: { type: 'Point', coordinates: [ %s , %s ] }, distanceField: 'dist', key: 'shops.location', num: 5 }}", sourcePoint.getX(), sourcePoint.getY());
         Document geoNear = Document.parse(geoNearStep);
 
         LocalDateTime dateTime = LocalDateTime.now().minusMonths(3L);
